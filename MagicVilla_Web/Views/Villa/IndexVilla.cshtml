@@ -7,7 +7,7 @@
             <h1 class="text-primary">Villa List</h1>
         </div>
         <div class="col text-end pt-1">
-            <a asp-controller="Villa" asp-action="" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>  Create New Villa</a>
+            <a asp-controller="Villa" asp-action="CreateVilla" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>  Create New Villa</a>
         </div>
     </div>
 
@@ -44,8 +44,8 @@
 
                         </td>
                         <td>
-                             <a class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                            <a class="btn btn-danger ms-1"><i class="bi bi-trash-fill"></i></a>
+                        <a class="btn btn-success" asp-controller="Villa" asp-action="UpdateVilla" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btn btn-danger ms-1" asp-controller="Villa" asp-action="DeleteVilla" asp-route-id="@item.Id"><i class="bi bi-trash-fill"></i></a>
 
                         </td>
                     </tr>

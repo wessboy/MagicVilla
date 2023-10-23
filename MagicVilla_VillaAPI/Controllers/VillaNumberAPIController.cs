@@ -11,7 +11,7 @@ using System.Security.Cryptography.Xml;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/VillaNumberAPI")]
     [ApiController]
     public class VillaNumberAPIController : ControllerBase
     {
