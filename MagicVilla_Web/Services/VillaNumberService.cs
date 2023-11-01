@@ -18,50 +18,55 @@ namespace MagicVilla_Web.Services
             
         }
 
-        public Task<T> CreateAsync<T>(VillaNumberCreatedDTO dto)
+        public Task<T> CreateAsync<T>(VillaNumberCreatedDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
-                Url = villaNumberUrl + "/api/VillaNumberAPI",
-                Data = dto
+                Url = villaNumberUrl + "/api/v1/VillaNumberAPI",
+                Data = dto,
+                Token = token
             });
         }
 
-        public Task<T> DeleteAsync<T>(int id)
+        public Task<T> DeleteAsync<T>(int id , string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = villaNumberUrl + "/api/VillaNumberAPI/" + id,
+                Url = villaNumberUrl + "/api/v1/VillaNumberAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> GetAllAsync<T>()
+        public Task<T> GetAllAsync<T>(string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = villaNumberUrl + "/api/VillaNumberAPI",
+                Url = villaNumberUrl + "/api/v1/VillaNumberAPI",
+                Token = token
             });
         }
 
-        public Task<T> GetAsync<T>(int id)
+        public Task<T> GetAsync<T>(int id, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = villaNumberUrl + "/api/VillaNumberAPI/" + id,
+                Url = villaNumberUrl + "/api/v1/VillaNumberAPI/" + id,
+                Token = token
             });
         }
 
-        public Task<T> UpdateAsync<T>(VillaNumberUpdateDTO dto)
+        public Task<T> UpdateAsync<T>(VillaNumberUpdateDTO dto, string token)
         {
             return SendAsync<T>(new APIRequest()
             {
-                ApiType = SD.ApiType.POST,
-                Url = villaNumberUrl + "/api/VillaNumberAPI/" +  dto.VillaId,
-                Data = dto
+                ApiType = SD.ApiType.PUT,
+                Url = villaNumberUrl + "/api/v1/VillaNumberAPI/" +  dto.VillaNo,
+                Data = dto,
+                Token = token
             });
         }
     }

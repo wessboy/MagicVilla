@@ -3,20 +3,22 @@ using AutoMapper;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dtos;
 using MagicVilla_VillaAPI.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-namespace MagicVilla_VillaAPI.Controllers
+namespace MagicVilla_VillaAPI.Controllers.V2
 {
-    [Route("api/VillaAPI")]
+    [Route("api/v{version:ApiVersion}/VillaAPI")]
     [ApiController]
-    public class VillaAPIController : ControllerBase
+    [ApiVersion("2.0")]
+    public class VillaAPIv2Controller : ControllerBase
     {
 
         protected APIResponse _response;
         private readonly IVillaRepository _dbVilla;
         private IMapper _mapper;
-        public VillaAPIController(IVillaRepository dbVilla,IMapper mapper)
+        public VillaAPIv2Controller(IVillaRepository dbVilla, IMapper mapper)
         {
             _mapper = mapper;
             _dbVilla = dbVilla;
@@ -42,18 +44,16 @@ namespace MagicVilla_VillaAPI.Controllers
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
             }
-           
+
 
             return Ok(_response);
         }
-
-
-
 
         [HttpGet("{id:int}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "user,admin")]
         public async Task<ActionResult<APIResponse>> GetVilla(int id)
         {
             try
@@ -77,10 +77,10 @@ namespace MagicVilla_VillaAPI.Controllers
             catch (Exception ex)
             {
 
-                _response.IsSuccess=false;
+                _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
             }
-           
+
             return Ok(_response);
 
         }
@@ -92,6 +92,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO createDTO)
         {
             try
@@ -117,7 +118,7 @@ namespace MagicVilla_VillaAPI.Controllers
             {
 
                 _response.IsSuccess = false;
-                _response.ErrorMessages = new List<string> {ex.ToString()};
+                _response.ErrorMessages = new List<string> { ex.ToString() };
             }
 
 
@@ -132,7 +133,8 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async  Task<ActionResult<APIResponse>> DeleteVilla(int id)
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<APIResponse>> DeleteVilla(int id)
         {
             try
             {
@@ -161,7 +163,9 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDTO updateDTO) {
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaUpdateDTO updateDTO)
+        {
             try
             {
                 if (updateDTO == null || id == 0 || id != updateDTO.Id)
@@ -182,11 +186,11 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess =false;
-                _response.ErrorMessages = new List<string> {ex.ToString() };
-                
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string> { ex.ToString() };
+
             }
-           
+
 
             return _response;
 
@@ -199,7 +203,8 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdatePartialVilla(int id,[FromBody]JsonPatchDocument<VillaUpdateDTO> patchDTo)
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<APIResponse>> UpdatePartialVilla(int id, [FromBody] JsonPatchDocument<VillaUpdateDTO> patchDTo)
         {
             try
             {
@@ -236,11 +241,11 @@ namespace MagicVilla_VillaAPI.Controllers
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.Message };
             }
-           
 
-                return _response ;
+
+            return _response;
 
         }
-        
+
     }
 }

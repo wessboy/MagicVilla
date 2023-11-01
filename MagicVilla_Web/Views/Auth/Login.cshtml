@@ -1,0 +1,22 @@
+﻿@model MagicVilla_Web.Models.Dtos.LoginRequestDTO
+
+<form method="post" asp-action="Login">
+    <div class="container border p-4">
+        <div class="row text-center">
+            <h1>Login</h1>
+        </div>
+        <div class="row">
+            <div class="col-6 offset-3 pb-2">
+                <input asp-for="UserName" class="form-control" type="text" placeholder="UserName..." />
+            </div>
+
+            <div class="col-6 offset-3 pb-2">
+                <input asp-for="Password" class="form-control" type="text" placeholder="Password..."/>
+            </div>
+            <div class="col-6 offset-3 pb-2">
+                <button type="submit" class="form-control btn-success" value="Submit">Login</button>
+            </div>
+            
+        </div>
+    </div>
+    </form>
