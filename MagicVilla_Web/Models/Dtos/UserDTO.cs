@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MagicVilla_Web.Models
+namespace MagicVilla_Web.Models.Dtos
 {
     public class UserDTO
     {

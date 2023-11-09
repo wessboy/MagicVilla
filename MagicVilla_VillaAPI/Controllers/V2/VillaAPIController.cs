@@ -12,13 +12,13 @@ namespace MagicVilla_VillaAPI.Controllers.V2
     [Route("api/v{version:ApiVersion}/VillaAPI")]
     [ApiController]
     [ApiVersion("2.0")]
-    public class VillaAPIv2Controller : ControllerBase
+    public class VillaAPIController : ControllerBase
     {
 
         protected APIResponse _response;
         private readonly IVillaRepository _dbVilla;
         private IMapper _mapper;
-        public VillaAPIv2Controller(IVillaRepository dbVilla, IMapper mapper)
+        public VillaAPIController(IVillaRepository dbVilla, IMapper mapper)
         {
             _mapper = mapper;
             _dbVilla = dbVilla;

@@ -40,7 +40,25 @@ namespace MagicVilla_VillaAPI.Repository
             return false;
         }
 
-        
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            List<ApplicationUser> usersFromDb = await _db.ApplicationUsers.ToListAsync();
+            
+           
+            List<UserDTO> userDTOsList = _mapper.Map<List<UserDTO>>(usersFromDb);
+
+            return userDTOsList;
+        }
+
+        public async Task<UserDTO> GetUser(string id)
+        {
+            ApplicationUser user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == id);
+            
+
+             UserDTO userDTO =  _mapper.Map<UserDTO>(user);
+
+            return userDTO;
+        }
 
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
@@ -106,12 +124,14 @@ namespace MagicVilla_VillaAPI.Repository
                 var result = await _userManager.CreateAsync(user,registrationRequestDTO.Password);
                 if (result.Succeeded)
                 {
-                    if(!_roleManager.RoleExistsAsync("admin").GetAwaiter().GetResult()) {
+                   if(!_roleManager.RoleExistsAsync(registrationRequestDTO.Role).GetAwaiter().GetResult()) {
 
-                        await _roleManager.CreateAsync(new IdentityRole("admin"));
-                        await _roleManager.CreateAsync(new IdentityRole("customer"));
+
+                        await _roleManager.CreateAsync(new IdentityRole(registrationRequestDTO.Role));
+                        
                      }
-                    await _userManager.AddToRoleAsync(user,"admin");
+
+                    await _userManager.AddToRoleAsync(user,registrationRequestDTO.Role);
 
                     ApplicationUser userToReturn = _db.ApplicationUsers.FirstOrDefault(u => u.UserName == registrationRequestDTO.UserName);
 
@@ -128,6 +148,28 @@ namespace MagicVilla_VillaAPI.Repository
             return null;
             
         }
+
+        public async Task<UserDTO> UpdateUser(string id, UpdatingRequestDTO updatingRequestDTO)
+        {
+            ApplicationUser user = await _db.ApplicationUsers.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                return null;
+            }
+            if (!_roleManager.RoleExistsAsync(updatingRequestDTO.Role).GetAwaiter().GetResult())
+            {
+                await _roleManager.CreateAsync(new IdentityRole(updatingRequestDTO.Role));
+            }
+                
+            
+            
+            //await _userManager.SetUserNameAsync(user,updatingRequestDTO.UserUpdateDTO.UserName);
+            //await _userManager.SetEmailAsync(user, updatingRequestDTO.UserUpdateDTO.Email);
+            await _userManager.UpdateAsync(_mapper.Map<ApplicationUser>(updatingRequestDTO.UserUpdateDTO));
+            await _userManager.AddToRoleAsync(user, updatingRequestDTO.Role);
+            await _db.SaveChangesAsync();
+            return _mapper.Map<UserDTO>(user);
+        } 
 
         
     }

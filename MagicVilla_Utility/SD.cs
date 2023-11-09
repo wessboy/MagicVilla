@@ -11,6 +11,9 @@
         };
 
         public static string SessionToken = "JWTToken";
+        public static string CurrentApiVersion = "v2";
+        public static string Admin = "admin";
+        public static string Customer = "customer";
 
     }
 }

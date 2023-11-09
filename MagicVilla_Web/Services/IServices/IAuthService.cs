@@ -8,5 +8,11 @@ namespace MagicVilla_Web.Services.IServices
         Task<T> LoginAsync<T>(LoginRequestDTO obj);
 
         Task<T> RegisterAsync<T>(RegistrationRequestDTO obj);
+
+        Task<T> UpdateUserAsync<T>(string id,UpdatingRequestDTO obj);
+
+        Task<T> GetUsersAsync<T>();
+
+        Task<T> GetUser<T>(string id);
     }
 }

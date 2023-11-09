@@ -1,0 +1,56 @@
+﻿@model List<MagicVilla_Web.Models.Dtos.UserDTO>
+
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Users List</h1>
+        </div>
+        <div class="col text-end pt-1">
+            <a asp-controller="Auth" asp-action="" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i>  Create New User</a>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    UserName
+                </th>
+                <th>
+                    Id
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.UserName
+                    </td>
+                    <td>
+                        @item.Id
+
+                    </td>
+                    <td>
+                        <a class="btn btn-success" asp-controller="Auth" asp-action="UpdateUser" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                        <a class="btn btn-danger ms-1" asp-controller="Auth" asp-action="DeleteUser" asp-route-id="@item.Id"><i class="bi bi-trash-fill"></i></a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

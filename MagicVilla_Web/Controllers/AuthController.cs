@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -23,6 +25,23 @@ namespace MagicVilla_Web.Controllers
             ;
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            List<UserDTO> users = new List<UserDTO>();
+
+            var response = await _auth.GetUsersAsync<APIResponse>();
+            if (response != null && response.IsSuccess)
+            {
+
+                users = JsonConvert.DeserializeObject<List<UserDTO>>(Convert.ToString(response.Result));
+            }
+
+            return View(users);
+
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -66,6 +85,12 @@ namespace MagicVilla_Web.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            var roles = new List<SelectListItem>()
+            {
+                new SelectListItem() {Text = SD.Admin , Value = SD.Admin},
+                new SelectListItem(){Text = SD.Customer, Value = SD.Customer},
+            };
+            ViewBag.RolesList = roles;
             return View();
         }
 
@@ -96,6 +121,51 @@ namespace MagicVilla_Web.Controllers
         {
             return View();
         }
+
+
+      /*  [HttpGet]
+        public async Task<IActionResult> UpdateUser(string id)
+        {
+            var response = await _auth.GetUser<APIResponse>(id);
+            if (response != null && response.IsSuccess)
+            {
+
+              UserDTO  userDto = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
+
+                UpdatingRequestDTO updatingRequestDTO = new()
+                {
+                    UserUpdateDTO = new()
+                    {
+                        Id = userDto.Id,
+                        Name = userDto.Name,
+                        UserName = userDto.UserName,
+                    },
+                    Role = ""
+                };
+                return View(updatingRequestDTO);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateUser(string id,UpdatingRequestDTO updatingRequestDTO)
+        {
+            if(ModelState.IsValid)
+            {
+                var response = await _auth.UpdateUserAsync<APIResponse>(id,updatingRequestDTO);
+                if (response != null && response.IsSuccess)
+                {
+                    TempData["success"] = "Villa updated successfully.";
+                    return RedirectToAction("Index","Auth");
+                }
+               
+            }
+
+            TempData["error"] = "Error encountred.";
+            return View(updatingRequestDTO);
+        }*/
 
 
     }
